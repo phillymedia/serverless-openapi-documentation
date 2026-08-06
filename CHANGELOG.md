@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-08-06
+
+### Fixed
+
+- `servers` under `custom.documentation` is now read and emitted in the generated
+  document. It was already declared on both the config and output interfaces, but
+  `DefinitionGenerator.parse()` never destructured it, so the key was silently
+  dropped — no error, no warning. Because OpenAPI 3.0 treats an absent `servers`
+  as a single server with url `/`, Swagger UI resolved requests against whichever
+  host served the spec, meaning a docs site on its own domain advertised that
+  domain as the API base URL.
+
+  The list is assigned rather than deep-merged, so Server Objects are taken
+  verbatim instead of being combined index-wise, and it is cloned so the caller's
+  array cannot be mutated through the generated definition. An empty array is
+  treated the same as omitting the key, matching the spec's own equivalence.
+
+  Note that generated paths already include the full route from each function's
+  `http` event, so a configured server URL should stop at the base path.
+
 ## [0.4.0][] - 2018-04-04
 
 - Various changes

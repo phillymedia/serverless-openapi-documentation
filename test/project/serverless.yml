@@ -54,6 +54,11 @@ functions:
 
 custom:
   documentation:
+    servers:
+      - url: https://api.example.com/v2
+        description: Production
+      - url: https://dev-api.example.com/v2
+        description: Development
     models:
       - name: ErrorResponse
         description: This is an error
