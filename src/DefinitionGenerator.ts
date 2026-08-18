@@ -31,6 +31,7 @@ export class DefinitionGenerator {
       description = '',
       version = uuid.v4(),
       models,
+      servers,
     } = this.config;
 
     merge(this.definition, {
@@ -42,6 +43,15 @@ export class DefinitionGenerator {
         securitySchemes: {},
       },
     });
+
+    // Assigned rather than merged: `merge` is a deep merge, which would combine
+    // Server Objects index-wise with anything already present instead of taking
+    // the configured list as-is. Omitted entirely when empty or absent — per
+    // OpenAPI 3.0 an empty `servers` array means the same as no `servers` at
+    // all, so emitting one would only add noise.
+    if (Array.isArray(servers) && servers.length > 0) {
+      this.definition.servers = clone(servers);
+    }
 
     if (isIterable(models)) {
       for (const model of models) {
