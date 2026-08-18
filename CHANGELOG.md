@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-08-18
+
+### Fixed
+
+- The `openapi generate` CLI command's `output`/`format`/`indent` options had no
+  declared `type`, which Serverless Framework v3 tolerated (defaulting an
+  untyped option to accept a value) but v4's stricter CLI option validation
+  does not — it defaults an untyped option to accepting *no* value, so passing
+  `-o <path>` (or `--output <path>`) failed with `Option "output" is of type
+  "string" but expected type "undefined"` before the command ever ran. Added
+  `type: 'string'` to all three options.
+
 ## [0.4.0][] - 2018-04-04
 
 - Various changes
