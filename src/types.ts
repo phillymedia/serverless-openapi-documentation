@@ -13,6 +13,13 @@ export interface IDefinitionConfig {
   description: string;
   version?: string;
   models: IModels[];
+  /**
+   * Root-level OpenAPI Server Objects, passed through verbatim to the generated
+   * document. Without it the `servers` key is omitted, and per OpenAPI 3.0 a
+   * consumer then defaults to a single server with url `/` — which Swagger UI
+   * resolves against whichever host serves the spec, not the API itself.
+   */
+  servers?: any[];
 }
 
 export interface IDefinitionType {

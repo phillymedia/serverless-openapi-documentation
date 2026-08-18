@@ -60,8 +60,29 @@ custom:
     version: '1'
     title: 'My API'
     description: 'This is my API'
+    servers:
+      - url: 'https://api.example.com/v2'
+        description: 'Production'
     models: {}
 ```
+
+#### Servers
+
+`servers` is optional and is passed through verbatim as the generated document's
+root-level [Server Objects](https://spec.openapis.org/oas/v3.0.3#server-object).
+
+Worth setting. If you leave it out, the generated document has no `servers` key,
+and per OpenAPI 3.0 a consumer then falls back to a single server with url `/` —
+which Swagger UI resolves against **whichever host is serving the spec**. A docs
+site published on its own domain will therefore advertise that domain as the API.
+
+Mind the interaction with your paths: the plugin derives paths from each
+function's `http` event, so they already carry the full route (`/rest/feeds`).
+The server URL must stop at the base path (`https://api.example.com/v2`) rather
+than repeat the route prefix, or requests resolve to `/v2/rest/rest/feeds`.
+
+An empty array is treated the same as omitting the key, matching the OpenAPI
+spec's own equivalence.
 
 These configurations can be quite verbose; you can separate it out into it's own file, such as `serverless.doc.yml` as below:
 
